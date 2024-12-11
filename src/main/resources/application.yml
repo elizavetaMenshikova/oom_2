@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: oom_2
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: postgres
+    password: postgres
