@@ -6,7 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
     <changeSet id="create-author-table" author="emenshikova">
         <createTable tableName="author">
-            <column name="id" type="UUID">
+            <column name="author_id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_author"/>
             </column>
             <column name="firstname" type="varchar2(100)">
@@ -21,13 +21,34 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create-generating-function" author="emenshikova">
-        <sqlFile path="sql/create_authors_generating_function.sql" splitStatements="false" relativeToChangelogFile="true"/>
+    <changeSet id="create-book-table" author="emenshikova">
+        <createTable tableName="book">
+            <column name="book_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_book"/>
+            </column>
+            <column name="name" type="varchar2(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 
-    <changeSet id="generate-million-authors" author="emenshikova">
+    <changeSet id="create_index" author="emenshikova">
+        <createIndex tableName="book" indexName="book_author_id">
+            <column name="author_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-generating-function" author="emenshikova">
+        <sqlFile path="sql/create_authors_and_books_generating_function.sql" splitStatements="false"
+                 relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="generate-authors-and-books" author="emenshikova">
         <sql>
-            SELECT generate_author();
+            SELECT generate_author_and_book(1000000, 5);
         </sql>
     </changeSet>
 </databaseChangeLog>

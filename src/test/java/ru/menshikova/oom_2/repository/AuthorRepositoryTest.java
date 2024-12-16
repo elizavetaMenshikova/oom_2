@@ -6,10 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.menshikova.oom_2.entity.Author;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -20,7 +20,11 @@ public class AuthorRepositoryTest {
     private AuthorRepository authorRepository;
 
     @Test
-    public void findAllOOM() {
-        List<Author> all = authorRepository.findAll();
+    public void findPageOOM() {
+        assertThrows(OutOfMemoryError.class, () -> {
+            int pageNumber = 0;
+            int pageSize = 10;
+            authorRepository.findPage(PageRequest.of(pageNumber, pageSize));
+        });
     }
 }
